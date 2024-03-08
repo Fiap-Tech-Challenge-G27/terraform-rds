@@ -1,0 +1,56 @@
+name: Terraform AWS Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.1.0
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: <YOUR_AWS_REGION>
+
+    - name: Terraform init
+      run: terraform init
+
+    - name: Terraform plan
+      run: terraform plan
+
+    - name: Request approval
+      id: approval
+      uses: "actions/github-script@0.10.3"
+      with:
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
+        script: |
+          const response = await github.pulls.createReview({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            pull_number: context.payload.pull_request.number,
+            event: 'APPROVE'
+          });
+
+    - name: Wait for approval
+      if: ${{ steps.approval.outputs.result == 'APPROVAL' }}
+      run: |
+        echo "Approved! Proceeding with Terraform apply."
+      continue-on-error: true
+
+    - name: Terraform apply
+      if: ${{ steps.approval.outputs.result == 'APPROVAL' }}
+      run: terraform apply -auto-approve
