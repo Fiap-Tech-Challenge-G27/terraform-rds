@@ -45,6 +45,7 @@ jobs:
             pull_number: context.payload.pull_request.number,
             event: 'APPROVE'
           });
+          core.setOutput('result', 'APPROVAL');  # Definindo a saída 'result'
 
     - name: Wait for approval
       if: ${{ steps.approval.outputs.result == 'APPROVAL' }}
