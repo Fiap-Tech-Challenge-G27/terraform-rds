@@ -7,6 +7,13 @@ variable "aws-region" {
 terraform {
   required_version = ">= 1.3, <= 1.7.4"
 
+  backend "s3" {
+    bucket         = "techchallengestate-g27"
+    key            = "terraform-rds/terraform.tfstate"
+    region         = var.aws-region
+    encrypt        = true
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
