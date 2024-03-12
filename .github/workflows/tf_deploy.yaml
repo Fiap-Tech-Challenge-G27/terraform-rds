@@ -25,6 +25,9 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
         aws-region: ${{ secrets.AWS_REGION }}
 
+    - name: Create S3 bucket
+      run: aws s3api create-bucket --bucket techchallengestate-g27 --create-bucket-configuration --region ${{ secrets.AWS_REGION }} LocationConstraint={{ secrets.AWS_REGION }} --acl private
+
     - name: Terraform init
       run: terraform init
 
