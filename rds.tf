@@ -10,7 +10,7 @@ terraform {
   backend "s3" {
     bucket         = "techchallengestate-g27"
     key            = "terraform-rds/terraform.tfstate"
-    region         = var.aws-region
+    region         = "us-east-1"
     encrypt        = true
   }
 
@@ -23,7 +23,7 @@ terraform {
 }
 
 provider "aws" {
-  region = var.aws-region
+  region = "us-east-1"
 }
 
 resource "aws_default_vpc" "vpcTechChallenge" {
