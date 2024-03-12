@@ -26,7 +26,7 @@ jobs:
         aws-region: us-east-1
 
     - name: Create S3 bucket
-      run: aws s3api create-bucket --bucket techchallengestate-g27 --create-bucket-configuration --region us-east-1 LocationConstraint=us-east-1 --acl private
+      run: aws s3api create-bucket --bucket techchallengestate-g27 --create-bucket-configuration --region us-east-1 --acl private
 
     - name: Terraform init
       run: terraform init
