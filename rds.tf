@@ -82,6 +82,7 @@ resource "aws_secretsmanager_secret_version" "db_credentials_version" {
 
 resource "aws_db_instance" "postgresdb" {
   allocated_storage    = 10
+  identifier           = "postgresapp" 
   db_name              = "app"
   engine               = "postgres"
   engine_version       = "15"
@@ -89,8 +90,4 @@ resource "aws_db_instance" "postgresdb" {
   username = random_string.username.result
   password = random_string.password.result
   skip_final_snapshot  = true
-
-  tags = {
-    Name = "postgresapp"
-  }
 }
