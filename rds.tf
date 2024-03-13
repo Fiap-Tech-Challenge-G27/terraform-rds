@@ -74,6 +74,9 @@ resource "aws_secretsmanager_secret_version" "db_credentials_version" {
   secret_string = jsonencode({
     username = random_string.username.result
     password = random_string.password.result
+    host = aws_db_instance.postgresdb.address
+    port = aws_db_instance.postgresdb.port
+    db = aws_db_instance.postgresdb.db_name
   })
 }
 
@@ -87,4 +90,7 @@ resource "aws_db_instance" "postgresdb" {
   password = random_string.password.result
   skip_final_snapshot  = true
 
+  tags = {
+    Name = "postgresapp"
+  }
 }
