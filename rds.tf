@@ -15,6 +15,11 @@ terraform {
   }
 
   required_providers {
+    
+    random = {
+      version = "~> 3.0"
+    }
+
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.65"
@@ -48,14 +53,38 @@ resource "aws_default_subnet" "subnetTechChallenge2" {
   }
 }
 
+resource "random_string" "username" {
+  length  = 16
+  special = false
+  upper   = true
+}
+
+resource "random_string" "password" {
+  length           = 16
+  special          = true
+  override_special = "/@\" "
+}
+
+resource "aws_secretsmanager_secret" "db_credentials" {
+  name        = "db_credentials"
+}
+
+resource "aws_secretsmanager_secret_version" "db_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.db_credentials.id
+  secret_string = jsonencode({
+    username = random_string.username.result
+    password = random_string.password.result
+  })
+}
+
 resource "aws_db_instance" "postgresdb" {
   allocated_storage    = 10
   db_name              = "app"
   engine               = "postgres"
   engine_version       = "15"
   instance_class       = "db.t3.micro"
-  username             = "adminPostres"
-  password             = "adminPostgres"
+  username = random_string.username.result
+  password = random_string.password.result
   skip_final_snapshot  = true
 
 }
