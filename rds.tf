@@ -90,4 +90,5 @@ resource "aws_db_instance" "postgresdb" {
   username = random_string.username.result
   password = random_string.password.result
   skip_final_snapshot  = true
+  publicly_accessible = true
 }
