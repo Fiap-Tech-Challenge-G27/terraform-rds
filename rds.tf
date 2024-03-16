@@ -66,7 +66,7 @@ resource "random_string" "password" {
 }
 
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = "db_credentials"
+  name        = "dbcredentials"
 }
 
 resource "aws_secretsmanager_secret_version" "db_credentials_version" {
