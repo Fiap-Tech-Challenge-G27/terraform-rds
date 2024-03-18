@@ -65,6 +65,10 @@ resource "random_string" "password" {
   override_special = "/@\" "
 }
 
+output "secrets_policy" {
+  value = aws_iam_policy.secretsPolicy.arn
+}
+
 resource "aws_secretsmanager_secret" "db_credentials" {
   name        = "dbcredentials"
 }
@@ -78,6 +82,20 @@ resource "aws_secretsmanager_secret_version" "db_credentials_version" {
     port = aws_db_instance.postgresdb.port
     db = aws_db_instance.postgresdb.db_name
     typeorm = "postgres://${random_string.username.result}:${random_string.password.result}@${aws_db_instance.postgresdb.address}:${aws_db_instance.postgresdb.port}/${aws_db_instance.postgresdb.db_name}"
+  })
+}
+
+resource "aws_iam_policy" "secretsPolicy" {
+  name   = "podsecrets-deployment-policy"
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
+        Resource = [aws_secretsmanager_secret.db_crentials.arn]
+      },
+    ]
   })
 }
 
