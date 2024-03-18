@@ -93,7 +93,7 @@ resource "aws_iam_policy" "secretsPolicy" {
       {
         Effect   = "Allow"
         Action   = ["secretsmanager:GetSecretValue", "secretsmanager:DescribeSecret"]
-        Resource = [aws_secretsmanager_secret.db_crentials.arn]
+        Resource = [aws_secretsmanager_secret.db_credentials.arn]
       },
     ]
   })
