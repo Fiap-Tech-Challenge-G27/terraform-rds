@@ -53,6 +53,15 @@ resource "aws_default_subnet" "subnetTechChallenge2" {
   }
 }
 
+resource "aws_db_subnet_group" "rdsgroupsubnet" {
+  name        = "techchallenge-subnet-group"
+  subnet_ids  = [aws_default_subnet.subnetTechChallenge.id, aws_default_subnet.subnetTechChallenge2.id]
+
+  tags = {
+    Name = "My DB Subnet Group"
+  }
+}
+
 resource "random_string" "username" {
   length  = 16
   special = false
@@ -110,4 +119,5 @@ resource "aws_db_instance" "postgresdb" {
   password = random_string.password.result
   skip_final_snapshot  = true
   publicly_accessible = true
+  db_subnet_group_name = aws_db_subnet_group.rdsgroupsubnet.name
 }
