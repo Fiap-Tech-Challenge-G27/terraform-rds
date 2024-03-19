@@ -82,17 +82,6 @@ resource "aws_secretsmanager_secret" "db_credentials" {
   name        = "dbcredentials"
 }
 
-resource "aws_secretsmanager_secret" "jwt_credentials" {
-  name        = "jwt_credentials"
-}
-
-resource "aws_secretsmanager_secret_version" "jwt_credentials_version" {
-  secret_id     = aws_secretsmanager_secret.jwt_credentials.id
-  secret_string = jsonencode({
-    jwtSecret = "secret"
-  })
-}
-
 resource "aws_secretsmanager_secret_version" "db_credentials_version" {
   secret_id     = aws_secretsmanager_secret.db_credentials.id
   secret_string = jsonencode({
