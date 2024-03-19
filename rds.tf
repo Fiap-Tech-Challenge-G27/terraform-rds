@@ -94,6 +94,18 @@ resource "aws_secretsmanager_secret_version" "db_credentials_version" {
   })
 }
 
+resource "aws_secretsmanager_secret_version" "db_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.db_credentials.id
+  secret_string = jsonencode({
+    username = random_string.username.result
+    password = random_string.password.result
+    host = aws_db_instance.postgresdb.address
+    port = aws_db_instance.postgresdb.port
+    db = aws_db_instance.postgresdb.db_name
+    typeorm = "postgres://${random_string.username.result}:${random_string.password.result}@${aws_db_instance.postgresdb.address}:${aws_db_instance.postgresdb.port}/${aws_db_instance.postgresdb.db_name}"
+  })
+}
+
 resource "aws_iam_policy" "secretsPolicy" {
   name   = "podsecrets-deployment-policy"
   policy = jsonencode({
