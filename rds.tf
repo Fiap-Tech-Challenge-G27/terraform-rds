@@ -82,6 +82,29 @@ resource "aws_secretsmanager_secret" "db_credentials" {
   name        = "dbcredentials"
 }
 
+resource "aws_secretsmanager_secret" "jwt_credentials" {
+  name        = "jwt_credentials"
+}
+
+resource "aws_secretsmanager_secret_version" "jwt_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.jwt_credentials.id
+  secret_string = jsonencode({
+    jwtSecret = "secret"
+  })
+}
+
+resource "aws_secretsmanager_secret_version" "db_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.db_credentials.id
+  secret_string = jsonencode({
+    username = random_string.username.result
+    password = random_string.password.result
+    host = aws_db_instance.postgresdb.address
+    port = aws_db_instance.postgresdb.port
+    db = aws_db_instance.postgresdb.db_name
+    typeorm = "postgres://${random_string.username.result}:${random_string.password.result}@${aws_db_instance.postgresdb.address}:${aws_db_instance.postgresdb.port}/${aws_db_instance.postgresdb.db_name}"
+  })
+}
+
 resource "aws_secretsmanager_secret_version" "db_credentials_version" {
   secret_id     = aws_secretsmanager_secret.db_credentials.id
   secret_string = jsonencode({
