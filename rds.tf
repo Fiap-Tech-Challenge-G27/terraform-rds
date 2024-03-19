@@ -119,5 +119,4 @@ resource "aws_db_instance" "postgresdb" {
   password = random_string.password.result
   skip_final_snapshot  = true
   publicly_accessible = true
-  # db_subnet_group_name = aws_db_subnet_group.rdsgroupsubnet.name
 }
