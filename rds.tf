@@ -53,7 +53,7 @@ resource "aws_default_subnet" "subnetTechChallenge2" {
   }
 }
 
-resource "aws_db_subnet_group" "rdsgroupsubnet" {
+resource "aws_db_subnet_group" "dbgroupsubnet" {
   name        = "techchallenge-subnet-group"
   subnet_ids  = [aws_default_subnet.subnetTechChallenge.id, aws_default_subnet.subnetTechChallenge2.id]
 
@@ -76,6 +76,10 @@ resource "random_string" "password" {
 
 output "secrets_policy" {
   value = aws_iam_policy.secretsPolicy.arn
+}
+
+output "secrets_id" {
+  value = aws_secretsmanager_secret.db_credentials.id
 }
 
 resource "aws_secretsmanager_secret" "db_credentials" {
