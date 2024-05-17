@@ -123,4 +123,5 @@ resource "aws_db_instance" "postgresdb" {
   skip_final_snapshot  = true
   publicly_accessible = true
   storage_encrypted = true
+  backup_retention_period = 5
 }
