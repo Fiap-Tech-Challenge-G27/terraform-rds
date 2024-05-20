@@ -70,8 +70,8 @@ resource "random_string" "username" {
 }
 
 resource "random_string" "password" {
-  length           = 18
-  special          = true
+  length           = 16
+  special          = false
   override_special = "/@\" "
 }
 
