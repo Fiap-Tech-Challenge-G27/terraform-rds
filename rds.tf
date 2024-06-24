@@ -84,7 +84,8 @@ output "secrets_id" {
 }
 
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = "dbcredentials"
+  name        = "dbcredentialsv2"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "db_credentials_version" {
