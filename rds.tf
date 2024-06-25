@@ -47,7 +47,7 @@ resource "random_string" "username" {
 
 resource "random_string" "password" {
   length           = 16
-  special          = true
+  special          = false
   override_special = "/@\" "
 }
 
@@ -60,7 +60,8 @@ output "secrets_id" {
 }
 
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = "dbcredentials"
+  name        = "dbcredentialsv2"
+  recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "db_credentials_version" {
