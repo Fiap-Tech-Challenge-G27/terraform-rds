@@ -30,33 +30,9 @@ provider "aws" {
   region = "us-east-1"
 }
 
-resource "aws_default_vpc" "vpcTechChallenge" {
-  tags = {
-    Name = "Default VPC to Tech Challenge"
-  }
-}
-
-resource "aws_default_subnet" "subnetTechChallenge" {
-  availability_zone = "us-east-1a"
-
-  tags = {
-    Name = "Default subnet for us-east-1a to Tech Challenge",
-    "kubernetes.io/role/elb" = "1"
-  }
-}
-
-resource "aws_default_subnet" "subnetTechChallenge2" {
-  availability_zone = "us-east-1b"
-
-  tags = {
-    Name = "Default subnet for us-east-1b to Tech Challenge",
-    "kubernetes.io/role/elb" = "1"
-  }
-}
-
 resource "aws_db_subnet_group" "dbgroupsubnet" {
   name        = "techchallenge-subnet-group"
-  subnet_ids  = [aws_default_subnet.subnetTechChallenge.id, aws_default_subnet.subnetTechChallenge2.id]
+  subnet_ids  = [data.aws_subnet.subnet1.id, data.aws_subnet.subnet2.id]
 
   tags = {
     Name = "My DB Subnet Group"
