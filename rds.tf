@@ -40,7 +40,7 @@ resource "aws_db_subnet_group" "dbgroupsubnet" {
 }
 
 resource "random_string" "username" {
-  length  = 16
+  length  = 14
   special = false
   upper   = true
 }
